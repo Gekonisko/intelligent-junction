@@ -3,26 +3,56 @@
     {
       "type": "addVehicle",
       "vehicleId": "vehicle1",
+      "startRoad": "west",
+      "endRoad": "north"
+    },
+    {
+      "type": "addVehicle",
+      "vehicleId": "vehicle2",
       "startRoad": "south",
       "endRoad": "east"
     },
     {
       "type": "addVehicle",
-      "vehicleId": "vehicle2",
-      "startRoad": "north",
-      "endRoad": "south"
-    },
-    {
-      "type": "addVehicle",
       "vehicleId": "vehicle3",
-      "startRoad": "west",
-      "endRoad": "south"
+      "startRoad": "east",
+      "endRoad": "west"
     },
     {
       "type": "addVehicle",
       "vehicleId": "vehicle4",
-      "startRoad": "east",
+      "startRoad": "north",
       "endRoad": "west"
+    },
+    {
+      "type": "addVehicle",
+      "vehicleId": "vehicle5",
+      "startRoad": "west",
+      "endRoad": "north"
+    },
+    {
+      "type": "addVehicle",
+      "vehicleId": "vehicle6",
+      "startRoad": "south",
+      "endRoad": "east"
+    },
+    {
+      "type": "addVehicle",
+      "vehicleId": "vehicle7",
+      "startRoad": "east",
+      "endRoad": "south"
+    },
+    {
+      "type": "addVehicle",
+      "vehicleId": "vehicle8",
+      "startRoad": "north",
+      "endRoad": "east"
+    },
+    {
+      "type": "step"
+    },
+    {
+      "type": "step"
     },
     {
       "type": "step"

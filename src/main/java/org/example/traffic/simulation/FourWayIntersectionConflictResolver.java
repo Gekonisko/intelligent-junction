@@ -4,14 +4,12 @@ import org.example.traffic.model.Direction;
 import org.example.traffic.model.Movement;
 import org.example.traffic.model.Vehicle;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class FourWayIntersectionConflictResolver implements IntersectionConflictResolver {
 
-    public Set<List<Vehicle>> nonConflictingGroup(List<Vehicle> vehicles) {
+    public LinkedList<List<Vehicle>> nonConflictingGroup(List<Vehicle> vehicles) {
         Set<List<Vehicle>> groups = new HashSet<>();
         int n = vehicles.size();
         int max = 1 << n;
@@ -27,7 +25,7 @@ public class FourWayIntersectionConflictResolver implements IntersectionConflict
                 groups.add(group);
             }
         }
-        return groups;
+        return sortByGroupSize(groups);
     }
 
     public boolean isConflict(Vehicle a, Vehicle b) {
@@ -49,18 +47,29 @@ public class FourWayIntersectionConflictResolver implements IntersectionConflict
             if(Direction.oppositeOf(a.from) == b.from &&
                     (bMove == Movement.STRAIGHT || bMove == Movement.RIGHT)) return false;
             else if(Direction.leftOf(a.from) == b.from &&
-                    bMove == Movement.RIGHT) return false;
+                    (bMove == Movement.RIGHT || bMove == Movement.LEFT)) return false;
             else if(Direction.rightOf(a.from) == b.from &&
-                    (bMove == Movement.STRAIGHT || bMove == Movement.RIGHT)) return false;
+                    (bMove == Movement.STRAIGHT || bMove == Movement.RIGHT  || bMove == Movement.LEFT)) return false;
         }
         else if(aMove == Movement.LEFT)
         {
-            if(Direction.leftOf(a.from) == b.from &&
+            if(Direction.oppositeOf(a.from) == b.from &&
+                    bMove == Movement.LEFT) return false;
+            else if(Direction.leftOf(a.from) == b.from &&
+                    bMove == Movement.RIGHT) return false;
+            else if(Direction.rightOf(a.from) == b.from &&
                     bMove == Movement.RIGHT) return false;
         }
 
         return true;
 
+    }
+
+    private LinkedList<List<Vehicle>> sortByGroupSize(Set<List<Vehicle>> groups) {
+        return groups.stream()
+                .sorted(Comparator.comparingInt(List::size))
+                .collect(Collectors.toCollection(LinkedList::new))
+                .reversed();
     }
 
     private boolean isConflict(List<Vehicle> group) {

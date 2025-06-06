@@ -8,8 +8,8 @@ import org.example.traffic.model.StepStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,7 +25,7 @@ public class SimulationEngineTest {
     }
 
     @Test
-    public void testSimulationSequence() throws Exception {
+    public void testSimulation_baseExample() throws Exception {
 
         List<Command> commands = List.of(
                 new AddVehicleCommand("vehicle1", "south", "north"),
@@ -48,5 +48,36 @@ public class SimulationEngineTest {
 
         assertEquals(JsonWriter.toJsonString(results),
                 JsonWriter.toJsonString(expectedResults));
+    }
+
+    @Test
+    public void testSimulation_twentyVehicles() throws Exception {
+
+        List<Command> commands = List.of(
+                new AddVehicleCommand("vehicle1", "west", "east"),
+                new AddVehicleCommand("vehicle2", "south", "north"),
+                new AddVehicleCommand("vehicle3", "east", "north"),
+                new AddVehicleCommand("vehicle4", "north", "east"),
+                new StepCommand(),
+                new AddVehicleCommand("vehicle5", "west", "north"),
+                new AddVehicleCommand("vehicle6", "south", "east"),
+                new AddVehicleCommand("vehicle7", "east", "west"),
+                new AddVehicleCommand("vehicle8", "north", "south"),
+                new StepCommand(),
+                new StepCommand(),
+                new AddVehicleCommand("vehicle9", "west", "east"),
+                new AddVehicleCommand("vehicle10", "south", "east"),
+                new AddVehicleCommand("vehicle11", "east", "south"),
+                new AddVehicleCommand("vehicle12", "north", "west"),
+                new StepCommand(),
+                new StepCommand(),
+                new StepCommand(),
+                new StepCommand()
+        );
+        List<StepStatus> results = engine.runSimulation(commands);
+
+        int vehicles = results.stream().map(l -> l.leftVehicles.size()).reduce(0, Integer::sum);
+
+        assertEquals(12, vehicles);
     }
 }

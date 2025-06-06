@@ -3,7 +3,10 @@ package org.example.traffic;
 import org.example.traffic.io.Command;
 import org.example.traffic.io.JsonLoader;
 import org.example.traffic.io.JsonWriter;
+import org.example.traffic.model.Direction;
+import org.example.traffic.model.StepNode;
 import org.example.traffic.model.StepStatus;
+import org.example.traffic.model.Vehicle;
 import org.example.traffic.simulation.*;
 
 import java.util.List;
@@ -17,9 +20,11 @@ public class Main {
 
         List<Command> commands = JsonLoader.loadCommands(args[0]);
 
-        IntersectionConflictResolver intersectionConflictResolver = new FourWayIntersectionConflictResolver();
-        Intersection intersection = new FourWayIntersection(intersectionConflictResolver);
-        SimulationEngine engine = new SimulationEngine(intersection);
+        IntersectionConflictResolver conflictResolver = new FourWayIntersectionConflictResolver();
+        Intersection intersection = new FourWayIntersection(conflictResolver);
+        IntersectionDecisionTree decisionTree = new IntersectionDecisionTree(intersection, conflictResolver, 4, 4);
+
+        SimulationEngine engine = new SimulationEngine(intersection, decisionTree);
 
         List<StepStatus> results = engine.runSimulation(commands);
         System.out.println(JsonWriter.toJsonString(results));

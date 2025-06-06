@@ -5,6 +5,7 @@ import org.example.traffic.model.Vehicle;
 import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -17,9 +18,19 @@ public class FourWayIntersectionConflictResolverTest {
     void testIsConflict_LeftMovement_NoConflict() {
         Vehicle v1 = new Vehicle("A", Direction.SOUTH, Direction.WEST);
 
-        Vehicle v2 = new Vehicle("B", Direction.WEST, Direction.SOUTH);
+        List<Vehicle> v2 = List.of(
+                new Vehicle("A", Direction.NORTH, Direction.EAST),
+                new Vehicle("A", Direction.WEST, Direction.SOUTH),
+                new Vehicle("A", Direction.EAST, Direction.NORTH)
+        );
 
-        assertFalse(resolver.isConflict(v1, v2));
+        for (Vehicle v : v2) {
+            var conflict = resolver.isConflict(v, v1);
+            if (conflict) {
+                System.out.println(v + " - " + v1);
+            }
+            assertFalse(conflict);
+        }
     }
 
     @Test
@@ -30,16 +41,18 @@ public class FourWayIntersectionConflictResolverTest {
                 new Vehicle("A", Direction.WEST, Direction.EAST),
                 new Vehicle("B", Direction.WEST, Direction.NORTH),
                 new Vehicle("C", Direction.EAST, Direction.SOUTH),
-                new Vehicle("C", Direction.EAST, Direction.NORTH),
                 new Vehicle("C", Direction.EAST, Direction.WEST),
                 new Vehicle("C", Direction.NORTH, Direction.WEST),
-                new Vehicle("C", Direction.NORTH, Direction.EAST),
                 new Vehicle("C", Direction.NORTH, Direction.SOUTH),
                 new Vehicle("C", Direction.SOUTH, Direction.NORTH)
         );
 
         for (Vehicle v : v2) {
-            assertTrue(resolver.isConflict(v, v1));
+            var conflict = resolver.isConflict(v, v1);
+            if (!conflict) {
+                System.out.println(v + " - " + v1);
+            }
+            assertTrue(conflict);
         }
     }
 
@@ -52,12 +65,17 @@ public class FourWayIntersectionConflictResolverTest {
                 new Vehicle("A", Direction.NORTH, Direction.SOUTH),
                 new Vehicle("A", Direction.NORTH, Direction.WEST),
                 new Vehicle("A", Direction.SOUTH, Direction.EAST),
+                new Vehicle("A", Direction.SOUTH, Direction.WEST),
                 new Vehicle("A", Direction.WEST, Direction.EAST),
                 new Vehicle("A", Direction.WEST, Direction.SOUTH)
         );
 
         for (Vehicle v : v2) {
-            assertFalse(resolver.isConflict(v, v1));
+            var conflict = resolver.isConflict(v, v1);
+            if (conflict) {
+                System.out.println(v + " - " + v1);
+            }
+            assertFalse(conflict);
         }
     }
 
@@ -68,12 +86,15 @@ public class FourWayIntersectionConflictResolverTest {
         List<Vehicle> v2 = List.of(
                 new Vehicle("A", Direction.EAST, Direction.NORTH),
                 new Vehicle("A", Direction.SOUTH, Direction.NORTH),
-                new Vehicle("A", Direction.SOUTH, Direction.WEST),
                 new Vehicle("A", Direction.WEST, Direction.NORTH)
         );
 
         for (Vehicle v : v2) {
-            assertTrue(resolver.isConflict(v, v1));
+            var conflict = resolver.isConflict(v, v1);
+            if (!conflict) {
+                System.out.println(v + " - " + v1);
+            }
+            assertTrue(conflict);
         }
     }
 
@@ -88,7 +109,11 @@ public class FourWayIntersectionConflictResolverTest {
         );
 
         for (Vehicle v : v2) {
-            assertFalse(resolver.isConflict(v, v1));
+            var conflict = resolver.isConflict(v, v1);
+            if (conflict) {
+                System.out.println(v + " - " + v1);
+            }
+            assertFalse(conflict);
         }
     }
 
@@ -107,7 +132,11 @@ public class FourWayIntersectionConflictResolverTest {
         );
 
         for (Vehicle v : v2) {
-            assertTrue(resolver.isConflict(v, v1));
+            var conflict = resolver.isConflict(v, v1);
+            if (!conflict) {
+                System.out.println(v + " - " + v1);
+            }
+            assertTrue(conflict);
         }
     }
 
@@ -120,7 +149,7 @@ public class FourWayIntersectionConflictResolverTest {
 
         List<Vehicle> vehicles = List.of(v1, v2, v3, v4);
 
-        Set<List<Vehicle>> groups = resolver.nonConflictingGroup(vehicles);
+        LinkedList<List<Vehicle>> groups = resolver.nonConflictingGroup(vehicles);
 
         assertNotNull(groups);
         assertFalse(groups.isEmpty());
