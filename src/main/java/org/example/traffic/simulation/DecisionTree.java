@@ -8,4 +8,5 @@ import java.util.List;
 public interface DecisionTree {
     void build(StepNode stepNode, List<Vehicle> vehicles);
     StepNode getBestStepNode(List<StepNode> stepNodes, List<Vehicle> vehicles);
+    int getSimultaneousDecisions();
 }

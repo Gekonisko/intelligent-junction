@@ -19,10 +19,6 @@ public class FourWayIntersection implements Intersection {
         }
     }
 
-    public static FourWayIntersection getInstance(IntersectionConflictResolver conflictResolver) {
-        return new FourWayIntersection(conflictResolver);
-    }
-
     @Override
     public Intersection createNewIntersection() {
         return new FourWayIntersection(this.conflictResolver);
@@ -86,14 +82,14 @@ public class FourWayIntersection implements Intersection {
     }
 
     @Override
-    public StepStatus step(DecisionTree decisionTree, int simultaneousDecisions) {
+    public StepStatus step(DecisionTree decisionTree) {
         List<String> left = new ArrayList<>();
 
         List<Vehicle> frontVehicles = getFrontVehicles();
         var nonConflict = conflictResolver.nonConflictingGroup(frontVehicles);
 
         List<StepNode> decisions = new ArrayList<>();
-        for (int i = 0; i < simultaneousDecisions; i++) {
+        for (int i = 0; i < decisionTree.getSimultaneousDecisions(); i++) {
             if (nonConflict.isEmpty()) break;
             decisions.add(new StepNode(nonConflict.poll()));
         }

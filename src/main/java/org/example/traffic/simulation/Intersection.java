@@ -13,7 +13,7 @@ public interface Intersection {
     Vehicle removeVehicle(Vehicle v);
     List<Vehicle> removeVehicles(List<Vehicle> list);
     List<Vehicle> getVehicles();
-    StepStatus step(DecisionTree decisionTree, int simultaneousDecisions);
+    StepStatus step(DecisionTree decisionTree);
     StepStatus step();
     List<Vehicle> getFrontVehicles();
 }

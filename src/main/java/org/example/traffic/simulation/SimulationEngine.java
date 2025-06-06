@@ -32,7 +32,7 @@ public class SimulationEngine {
                 intersection.addVehicle(v);
             } else if (cmd instanceof StepCommand) {
                 if (decisionTree != null) {
-                    results.add(intersection.step(decisionTree, 4));
+                    results.add(intersection.step(decisionTree));
                 }
                 else {
                     results.add(intersection.step());

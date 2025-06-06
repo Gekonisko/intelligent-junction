@@ -21,7 +21,8 @@ public class SimulationEngineTest {
     public void setUp() {
         IntersectionConflictResolver resolver = new FourWayIntersectionConflictResolver();
         Intersection intersection = new FourWayIntersection(resolver);
-        engine = new SimulationEngine(intersection);
+        DecisionTree decisionTree = new IntersectionDecisionTree(intersection, resolver, 4, 4);
+        engine = new SimulationEngine(intersection, decisionTree);
     }
 
     @Test
@@ -79,5 +80,29 @@ public class SimulationEngineTest {
         int vehicles = results.stream().map(l -> l.leftVehicles.size()).reduce(0, Integer::sum);
 
         assertEquals(12, vehicles);
+    }
+
+    @Test
+    public void testSimulation_decisionTree() throws Exception {
+
+        List<Command> commands = List.of(
+                new AddVehicleCommand("vehicle1", "west", "north"),
+                new AddVehicleCommand("vehicle2", "south", "east"),
+                new AddVehicleCommand("vehicle3", "east", "west"),
+                new AddVehicleCommand("vehicle4", "north", "west"),
+                new AddVehicleCommand("vehicle5", "west", "north"),
+                new AddVehicleCommand("vehicle6", "south", "east"),
+                new AddVehicleCommand("vehicle7", "east", "south"),
+                new AddVehicleCommand("vehicle8", "north", "east"),
+                new StepCommand(),
+                new StepCommand(),
+                new StepCommand(),
+                new StepCommand()
+        );
+        List<StepStatus> results = engine.runSimulation(commands);
+
+        int vehicles = results.stream().map(l -> l.leftVehicles.size()).reduce(0, Integer::sum);
+
+        assertEquals(8, vehicles);
     }
 }

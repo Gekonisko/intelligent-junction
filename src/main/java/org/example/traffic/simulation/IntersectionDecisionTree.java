@@ -9,13 +9,13 @@ public class IntersectionDecisionTree implements DecisionTree {
     private final Intersection intersection;
     private final IntersectionConflictResolver conflictResolver;
     private final int maxDepth;
-    private final int maxChildren;
+    private final int simultaneousDecisions;
 
-    public IntersectionDecisionTree(Intersection intersection, IntersectionConflictResolver conflictResolver, int maxDepth, int maxChildren) {
+    public IntersectionDecisionTree(Intersection intersection, IntersectionConflictResolver conflictResolver, int maxDepth, int simultaneousDecisions) {
         this.intersection = intersection;
         this.conflictResolver = conflictResolver;
         this.maxDepth = maxDepth;
-        this.maxChildren = maxChildren;
+        this.simultaneousDecisions = simultaneousDecisions;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class IntersectionDecisionTree implements DecisionTree {
         var frontVehicles = intersection.getFrontVehicles();
         var nonConflict = conflictResolver.nonConflictingGroup(frontVehicles);
 
-        for (int i = 0 ; i < maxChildren ; i++) {
+        for (int i = 0 ; i < simultaneousDecisions ; i++) {
             if(nonConflict.isEmpty()) break;
 
             var targetGroup = nonConflict.poll();
@@ -49,7 +49,7 @@ public class IntersectionDecisionTree implements DecisionTree {
         var frontVehicles = intersection.getFrontVehicles();
         var nonConflict = conflictResolver.nonConflictingGroup(frontVehicles);
 
-        for (int i = 0 ; i < maxChildren ; i++) {
+        for (int i = 0 ; i < simultaneousDecisions ; i++) {
             if(nonConflict.isEmpty()) break;
 
             var targetGroup = nonConflict.poll();
@@ -66,7 +66,7 @@ public class IntersectionDecisionTree implements DecisionTree {
         if (stepNodes.isEmpty()) return null;
 
         for (StepNode node : stepNodes) {
-            build(node, vehicles, 0); // buduj drzewo od każdego węzła
+            build(node, vehicles);
         }
 
         StepNode best = null;
@@ -87,6 +87,11 @@ public class IntersectionDecisionTree implements DecisionTree {
         }
 
         return best;
+    }
+
+    @Override
+    public int getSimultaneousDecisions() {
+        return simultaneousDecisions;
     }
 
     private void dfsCount(StepNode node, int[] maxVehicles, int[] minDepth) {

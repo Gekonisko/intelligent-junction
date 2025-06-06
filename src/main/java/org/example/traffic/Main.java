@@ -3,13 +3,11 @@ package org.example.traffic;
 import org.example.traffic.io.Command;
 import org.example.traffic.io.JsonLoader;
 import org.example.traffic.io.JsonWriter;
-import org.example.traffic.model.Direction;
-import org.example.traffic.model.StepNode;
 import org.example.traffic.model.StepStatus;
-import org.example.traffic.model.Vehicle;
 import org.example.traffic.simulation.*;
 
 import java.util.List;
+
 
 public class Main {
     public static void main(String[] args) throws Exception {
