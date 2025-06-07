@@ -86,7 +86,7 @@ java -jar traffic-sim.jar \
    - wybierana jest ścieżka o najmniejszej głębokości (czyli szybsza realizacja).
 
 ![decisionTree.png](decisionTree.png)
-> Zdjęcie pokazuję wybór najoptymalniejszej drogi z pośród 4 aut: A,B,C oraz D stojących na skrzyżowaniu
+> Zdjęcie pokazuje wybór najoptymalniejszej drogi spośród 4 aut: A,B,C oraz D stojących na skrzyżowaniu
 
 ### Koszt obliczeniowy
 Drzewo decyzyjne budowane przez algorytm symulacji działa podobnie jak klasyczne drzewo n-arnalne:
@@ -98,9 +98,7 @@ Drzewo decyzyjne budowane przez algorytm symulacji działa podobnie jak klasyczn
 - d = głębokość drzewa (max-depth)
 - k = liczba dzieci w każdym węźle (simultaneous-decisions)
 
-$$
-\text{Total Nodes = } \Sigma^{d}_{i=1} k^{i}
-$$
+**$\text{Total Nodes = } \Sigma^{d}_{i=1} k^{i}$**
 
 |  `max-depth`  | `simultaneous-decisions` |Liczba węzłów (~) |
 |:-----------:|:------------------------:|:----------------:|
