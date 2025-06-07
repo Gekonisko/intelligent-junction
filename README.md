@@ -148,7 +148,7 @@ Content-Type: application/json
 }
 ```
 
-🌐 Frontend (React)
+## 🌐 Frontend (React)
 
 Interaktywny frontend aplikacji umożliwia użytkownikowi wizualne sterowanie i obserwowanie działania symulacji skrzyżowania. Zbudowany został w technologii React z wykorzystaniem bibliotek do wizualizacji i interakcji.
 
