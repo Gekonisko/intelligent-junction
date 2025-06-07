@@ -166,13 +166,32 @@ npm install
 npm start
 ```
 Aplikacja zostanie uruchomiona pod adresem:
-http://localhost:5173/
+http://localhost:3000
 
 ![img.png](img.png)
 ![img_1.png](img_1.png)
 ![img_2.png](img_2.png)
 
+## 🐳 Uruchamianie z Dockerem
 
+Projekt składa się z dwóch usług: backendu (Spring Boot w Javie) i frontendu (React), które są uruchamiane i koordynowane za pomocą Dockera i `docker-compose`.
 
+### ⚙️ Uruchamianie aplikacji
 
+```bash
+docker-compose up --build
+```
+
+Frontend dostępny na: http://localhost:3000
+
+Backend (REST API): http://localhost:8080
+
+## 🧪 Testowanie
+
+Projekt zawiera zestaw testów jednostkowych oraz komponentowych dla kluczowych elementów logiki symulacji.
+
+**Uruchamianie testów**
+```bash
+mvn test
+```
 

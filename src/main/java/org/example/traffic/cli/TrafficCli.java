@@ -2,6 +2,8 @@ package org.example.traffic.cli;
 
 import org.example.traffic.api.TrafficApplication;
 import org.example.traffic.model.EngineType;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import picocli.CommandLine;
 
 import java.io.File;
@@ -32,7 +34,9 @@ public class TrafficCli implements Runnable {
     @Override
     public void run() {
         if (serve) {
-            TrafficApplication.main(new String[0]);
+            SpringApplication app = new SpringApplication(TrafficApplication.class);
+            ConfigurableApplicationContext context = app.run();
+
             return;
         }
 

@@ -4,6 +4,7 @@ import org.example.traffic.io.AddVehicleCommand;
 import org.example.traffic.io.Command;
 import org.example.traffic.io.JsonWriter;
 import org.example.traffic.io.StepCommand;
+import org.example.traffic.model.EngineType;
 import org.example.traffic.model.StepStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ public class SimulationEngineTest {
         IntersectionConflictResolver resolver = new FourWayIntersectionConflictResolver();
         Intersection intersection = new FourWayIntersection(resolver);
         DecisionTree decisionTree = new IntersectionDecisionTree(intersection, resolver, 4, 4);
-        engine = new SimulationEngine(intersection, decisionTree);
+        engine = new SimulationEngine(intersection, EngineType.DECISION_TREE, decisionTree);
     }
 
     @Test
