@@ -4,11 +4,9 @@ import org.example.traffic.api.dto.SimulationRequest;
 import org.example.traffic.api.dto.SimulationResponse;
 import org.example.traffic.io.Command;
 import org.example.traffic.io.StepCommand;
+import org.example.traffic.model.EngineType;
 import org.example.traffic.model.StepStatus;
-import org.example.traffic.simulation.FourWayIntersection;
-import org.example.traffic.simulation.FourWayIntersectionConflictResolver;
-import org.example.traffic.simulation.IntersectionConflictResolver;
-import org.example.traffic.simulation.SimulationEngine;
+import org.example.traffic.simulation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +23,8 @@ public class SimulationController {
     public ResponseEntity<SimulationResponse> runSimulation(@RequestBody SimulationRequest request) {
         IntersectionConflictResolver conflictResolver = new FourWayIntersectionConflictResolver();
         FourWayIntersection intersection = new FourWayIntersection(conflictResolver);
-        SimulationEngine engine = new SimulationEngine(intersection);
+        IntersectionDecisionTree decisionTree = new IntersectionDecisionTree(intersection, conflictResolver, 4, 4);
+        SimulationEngine engine = new SimulationEngine(intersection, EngineType.DECISION_TREE, decisionTree);
         List<StepStatus> statuses = engine.runSimulation(request.getCommands());
 
         var result = mapper(request.getCommands(), statuses);

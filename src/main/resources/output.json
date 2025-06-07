@@ -1,22 +1,15 @@
 {
-  "stepStatuses": [
-    {
-      "leftVehicles": [
-        "vehicle2"
-      ]
-    },
-    {
-      "leftVehicles": [
-        "vehicle1"
-      ]
-    },
-    {
-      "leftVehicles": []
-    },
-    {
-      "leftVehicles": [
-        "vehicle3"
-      ]
-    }
-  ]
+  "stepStatuses" : [ {
+    "leftVehicles" : [ "vehicle1", "vehicle2", "vehicle4" ]
+  }, {
+    "leftVehicles" : [ "vehicle3", "vehicle6" ]
+  }, {
+    "leftVehicles" : [ "vehicle5", "vehicle7" ]
+  }, {
+    "leftVehicles" : [ "vehicle8" ]
+  }, {
+    "leftVehicles" : [ ]
+  }, {
+    "leftVehicles" : [ ]
+  } ]
 }
