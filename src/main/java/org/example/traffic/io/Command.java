@@ -15,5 +15,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 public abstract class Command {
     public String type;
 
-    public Command() {}
+    protected Command(String type) {
+        this.type = type;
+    }
 }

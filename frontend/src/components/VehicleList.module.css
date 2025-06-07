@@ -1,0 +1,50 @@
+/* Stylowanie kolejek pojazdów dla VehicleList */
+.queueBox {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+  max-height: 120px;
+}
+.vehicleRect {
+  padding: 12px;
+  width: 120px;
+  height: 36px;
+  background: #1976d2;
+  color: #fff;
+  border: 2px solid #1565c0;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 2px #aaa;
+  cursor: pointer;
+  margin-bottom: 0.2rem;
+  transition: all 0.2s;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vehicleRect.left {
+  background: linear-gradient(135deg, #4caf50 60%, #a5d6a7);
+  border: 2px solid #388e3c;
+  box-shadow: 0 0 2px #4caf50;
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+.vehicleRectShort {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100px;
+}
+.noVehicles {
+  color: #bbb;
+  font-style: italic;
+  font-size: 12px;
+  padding-left: 4px;
+  padding-right: 4px;
+}

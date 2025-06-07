@@ -5,9 +5,12 @@ public class AddVehicleCommand extends Command {
     public String startRoad;
     public String endRoad;
 
-    public AddVehicleCommand() {}
+    public AddVehicleCommand() {
+        super("addVehicle");
+    }
 
     public AddVehicleCommand(String vehicleId, String startRoad, String endRoad) {
+        super("addVehicle");
         this.vehicleId = vehicleId;
         this.startRoad = startRoad;
         this.endRoad = endRoad;

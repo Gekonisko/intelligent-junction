@@ -67,9 +67,8 @@ public class FourWayIntersectionConflictResolver implements IntersectionConflict
 
     private LinkedList<List<Vehicle>> sortByGroupSize(Set<List<Vehicle>> groups) {
         return groups.stream()
-                .sorted(Comparator.comparingInt(List::size))
-                .collect(Collectors.toCollection(LinkedList::new))
-                .reversed();
+                .sorted((a, b) -> Integer.compare(b.size(), a.size()))
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
     private boolean isConflict(List<Vehicle> group) {
