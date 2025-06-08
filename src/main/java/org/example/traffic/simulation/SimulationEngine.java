@@ -1,8 +1,6 @@
 package org.example.traffic.simulation;
 
-import org.example.traffic.io.AddVehicleCommand;
-import org.example.traffic.io.Command;
-import org.example.traffic.io.StepCommand;
+import org.example.traffic.io.*;
 import org.example.traffic.model.Direction;
 import org.example.traffic.model.EngineType;
 import org.example.traffic.model.StepStatus;
@@ -12,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimulationEngine {
-    private final Intersection intersection;
+    private final IntersectionCommands intersection;
     private final DecisionTree decisionTree;
     private final EngineType engineType;
     private final List<StepStatus> results = new ArrayList<>();
@@ -34,7 +32,17 @@ public class SimulationEngine {
             if (cmd instanceof AddVehicleCommand c) {
                 Vehicle v = new Vehicle(c.vehicleId, Direction.fromString(c.startRoad), Direction.fromString(c.endRoad));
                 intersection.addVehicle(v);
-            } else if (cmd instanceof StepCommand) {
+            }
+            else if (cmd instanceof FailureModeCommand c) {
+                intersection.setFailureMode(c.state);
+            }
+            else if (cmd instanceof RoadPriorityCommand c) {
+                intersection.setRoadPriority(Direction.fromString(c.road), c.priority);
+            }
+            else if (cmd instanceof AddPedestrianCommand c) {
+                intersection.addPedestrian(Direction.fromString(c.road));
+            }
+            else if (cmd instanceof StepCommand) {
                 if (engineType == EngineType.DECISION_TREE) {
                     results.add(intersection.step(decisionTree));
                 }

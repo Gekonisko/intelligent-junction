@@ -1,0 +1,51 @@
+{
+  "commands": [
+    {
+      "type": "addVehicle",
+      "vehicleId": "ID",
+      "startRoad": "west|north|east|south",
+      "endRoad": "west|north|east|south"
+    },
+    {
+      "type": "step"
+    },
+    {
+      "type": "failureMode",
+      "state" : "true|false"
+    },
+    {
+      "type": "roadPriority",
+      "road" : "west|north|east|south",
+      "priority": "int >= 0"
+    },
+    {
+      "type": "addPedestrian",
+      "road" : "west|north|east|south"
+    }
+  ],
+  "examples": [
+    {
+      "type": "addVehicle",
+      "vehicleId": "vehicle1",
+      "startRoad": "west",
+      "endRoad": "north"
+    },
+    {
+      "type": "step"
+    },
+    {
+      "type": "failureMode",
+      "stan" : "true"
+
+    },
+    {
+      "type": "roadPriority",
+      "road" : "west",
+      "priority": "1"
+    },
+    {
+      "type": "addPedestrian",
+      "road" : "west"
+    }
+  ]
+}

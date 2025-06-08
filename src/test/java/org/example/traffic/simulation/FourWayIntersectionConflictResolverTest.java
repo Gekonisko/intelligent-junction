@@ -1,13 +1,12 @@
 package org.example.traffic.simulation;
 
 import org.example.traffic.model.Direction;
+import org.example.traffic.model.Pedestrian;
+import org.example.traffic.model.StepResult;
 import org.example.traffic.model.Vehicle;
 import org.junit.jupiter.api.Test;
 
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -148,17 +147,18 @@ public class FourWayIntersectionConflictResolverTest {
         Vehicle v4 = new Vehicle("D", Direction.WEST, Direction.EAST);
 
         List<Vehicle> vehicles = List.of(v1, v2, v3, v4);
+        List<Pedestrian> pedestrians = List.of();
 
-        LinkedList<List<Vehicle>> groups = resolver.nonConflictingGroup(vehicles);
+        LinkedList<StepResult> groups = resolver.nonConflictingGroup(vehicles, pedestrians);
 
         assertNotNull(groups);
         assertFalse(groups.isEmpty());
 
-        for (List<Vehicle> group : groups) {
-            for (int i = 0; i < group.size(); i++) {
-                for (int j = i + 1; j < group.size(); j++) {
-                    assertFalse(resolver.isConflict(group.get(i), group.get(j)),
-                            "Found conflict between " + group.get(i).vehicleId + " and " + group.get(j).vehicleId);
+        for (StepResult group : groups) {
+            for (int i = 0; i < group.getLeftVehicles().size(); i++) {
+                for (int j = i + 1; j < group.getLeftVehicles().size(); j++) {
+                    assertFalse(resolver.isConflict(group.getLeftVehicles().get(i), group.getLeftVehicles().get(j)),
+                            "Found conflict between " + group.getLeftVehicles().get(i).vehicleId + " and " + group.getLeftVehicles().get(j).vehicleId);
                 }
             }
         }
@@ -172,15 +172,16 @@ public class FourWayIntersectionConflictResolverTest {
         Vehicle v4 = new Vehicle("D", Direction.WEST, Direction.SOUTH);
 
         List<Vehicle> vehicles = List.of(v1, v2, v3, v4);
-        var groups = resolver.nonConflictingGroup(vehicles);
+        List<Pedestrian> pedestrians = List.of();
+        var groups = resolver.nonConflictingGroup(vehicles, pedestrians);
 
-        var maxGroup = groups.stream().max(Comparator.comparingInt(List::size)).orElse(null);
+        var maxGroup = groups.stream().max(Comparator.comparingInt(StepResult::getFullSize)).orElse(null);
 
         assertNotNull(maxGroup);
-        assertEquals(3, maxGroup.size());
-        for (int i = 0; i < maxGroup.size(); i++) {
-            for (int j = i + 1; j < maxGroup.size(); j++) {
-                assertFalse(resolver.isConflict(maxGroup.get(i), maxGroup.get(j)));
+        assertEquals(3, maxGroup.getLeftVehicles().size());
+        for (int i = 0; i < maxGroup.getLeftVehicles().size(); i++) {
+            for (int j = i + 1; j < maxGroup.getLeftVehicles().size(); j++) {
+                assertFalse(resolver.isConflict(maxGroup.getLeftVehicles().get(i), maxGroup.getLeftVehicles().get(j)));
             }
         }
     }

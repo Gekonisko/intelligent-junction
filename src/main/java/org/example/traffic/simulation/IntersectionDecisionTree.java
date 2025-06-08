@@ -25,13 +25,13 @@ public class IntersectionDecisionTree implements DecisionTree {
         intersection.removeVehicles(stepNode.leftVehicles);
 
         var frontVehicles = intersection.getFrontVehicles();
-        var nonConflict = conflictResolver.nonConflictingGroup(frontVehicles);
+        var nonConflict = conflictResolver.nonConflictingGroup(frontVehicles, intersection.getPedestrians());
 
         for (int i = 0 ; i < simultaneousDecisions ; i++) {
             if(nonConflict.isEmpty()) break;
 
             var targetGroup = nonConflict.poll();
-            StepNode childNode = new StepNode(targetGroup);
+            StepNode childNode = new StepNode(targetGroup.getLeftVehicles(), targetGroup.getLeftPedestrians());
             childNode.parent = stepNode;
             stepNode.children.add(childNode);
 
@@ -47,13 +47,13 @@ public class IntersectionDecisionTree implements DecisionTree {
         intersection.removeVehicles(stepNode.leftVehicles);
 
         var frontVehicles = intersection.getFrontVehicles();
-        var nonConflict = conflictResolver.nonConflictingGroup(frontVehicles);
+        var nonConflict = conflictResolver.nonConflictingGroup(frontVehicles, intersection.getPedestrians());
 
         for (int i = 0 ; i < simultaneousDecisions ; i++) {
             if(nonConflict.isEmpty()) break;
 
             var targetGroup = nonConflict.poll();
-            StepNode childNode = new StepNode(targetGroup);
+            StepNode childNode = new StepNode(targetGroup.getLeftVehicles(), targetGroup.getLeftPedestrians());
             childNode.parent = stepNode;
             stepNode.children.add(childNode);
 

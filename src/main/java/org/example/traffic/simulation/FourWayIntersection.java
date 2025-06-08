@@ -1,21 +1,28 @@
 package org.example.traffic.simulation;
 
-import org.example.traffic.model.Direction;
-import org.example.traffic.model.StepNode;
-import org.example.traffic.model.StepStatus;
-import org.example.traffic.model.Vehicle;
+import org.example.traffic.model.*;
 
 import java.util.*;
 
 public class FourWayIntersection implements Intersection {
     private final Map<Direction, Queue<Vehicle>> queues = new EnumMap<>(Direction.class);
+    private final Map<Direction, Integer> roadPriorities = new EnumMap<>(Direction.class);
+    private final Map<Direction, Boolean> pedestrians = new EnumMap<>(Direction.class);
     private final IntersectionConflictResolver conflictResolver;
+    private boolean isFailureMode = false;
+    private Direction lastClockwiseDirection = Direction.NORTH;
 
     public FourWayIntersection(IntersectionConflictResolver conflictResolver) {
         this.conflictResolver = conflictResolver;
 
         for (Direction dir : Direction.values()) {
             queues.put(dir, new LinkedList<>());
+        }
+        for (Direction dir : Direction.values()) {
+            roadPriorities.put(dir, 0);
+        }
+        for (Direction dir : Direction.values()) {
+            pedestrians.put(dir, false);
         }
     }
 
@@ -67,15 +74,17 @@ public class FourWayIntersection implements Intersection {
 
     @Override
     public StepStatus step() {
+        if(isFailureMode) return clockwiseAlternatingTraffic();
+
         List<String> left = new ArrayList<>();
 
         List<Vehicle> frontVehicles = getFrontVehicles();
 
-        var nonConflict = conflictResolver.nonConflictingGroup(frontVehicles);
+        var nonConflict = conflictResolver.nonConflictingGroup(frontVehicles, getPedestrians());
         var maxGroup = nonConflict.poll();
 
         if (maxGroup != null) {
-            List<Vehicle> removedVehicles = removeVehicles(maxGroup);
+            List<Vehicle> removedVehicles = removeVehicles(maxGroup.getLeftVehicles());
             removedVehicles.forEach(v -> left.add(v.vehicleId));
         }
         return new StepStatus(left);
@@ -83,15 +92,18 @@ public class FourWayIntersection implements Intersection {
 
     @Override
     public StepStatus step(DecisionTree decisionTree) {
+        if(isFailureMode) return clockwiseAlternatingTraffic();
+
         List<String> left = new ArrayList<>();
 
         List<Vehicle> frontVehicles = getFrontVehicles();
-        var nonConflict = conflictResolver.nonConflictingGroup(frontVehicles);
+        var nonConflict = conflictResolver.nonConflictingGroup(frontVehicles, getPedestrians());
 
         List<StepNode> decisions = new ArrayList<>();
         for (int i = 0; i < decisionTree.getSimultaneousDecisions(); i++) {
             if (nonConflict.isEmpty()) break;
-            decisions.add(new StepNode(nonConflict.poll()));
+            var group = nonConflict.poll();
+            decisions.add(new StepNode(group.getLeftVehicles(), group.getLeftPedestrians()));
         }
 
         var best = decisionTree.getBestStepNode(decisions, getVehicles());
@@ -100,6 +112,21 @@ public class FourWayIntersection implements Intersection {
             removedVehicles.forEach(v -> left.add(v.vehicleId));
         }
         return new StepStatus(left);
+    }
+
+    @Override
+    public void setFailureMode(boolean value) {
+        isFailureMode = value;
+    }
+
+    @Override
+    public void setRoadPriority(Direction direction, int priority) {
+        roadPriorities.put(direction, priority);
+    }
+
+    @Override
+    public void addPedestrian(Direction direction) {
+        pedestrians.put(direction, true);
     }
 
     @Override
@@ -114,4 +141,29 @@ public class FourWayIntersection implements Intersection {
         return result;
     }
 
+    @Override
+    public List<Pedestrian> getPedestrians() {
+        List<Pedestrian> result = new ArrayList<>();
+
+        for (Direction dir : Direction.values()) {
+            if (pedestrians.get(dir) != null && pedestrians.get(dir)) {
+                result.add(new Pedestrian(dir));
+            }
+        }
+        return result;
+    }
+
+    private StepStatus clockwiseAlternatingTraffic()
+    {
+        var newDirection = Direction.leftOf(lastClockwiseDirection);
+        while (lastClockwiseDirection != newDirection) {
+            if(!queues.get(newDirection).isEmpty()) {
+                lastClockwiseDirection = newDirection;
+                var vehicle = queues.get(newDirection).poll();
+                return new StepStatus(List.of(vehicle.vehicleId));
+            }
+            newDirection = Direction.leftOf(lastClockwiseDirection);
+        }
+        return new StepStatus(List.of());
+    }
 }

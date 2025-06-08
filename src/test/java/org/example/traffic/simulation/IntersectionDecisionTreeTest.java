@@ -26,7 +26,7 @@ public class IntersectionDecisionTreeTest {
         Vehicle v1 = new Vehicle("v1", Direction.NORTH, Direction.SOUTH);
         Vehicle v2 = new Vehicle("v2", Direction.SOUTH, Direction.NORTH);
 
-        StepNode root = new StepNode(List.of(v1));
+        StepNode root = new StepNode(List.of(v1), List.of());
         decisionTree.build(root, List.of(v1, v2));
 
         assertFalse(root.children.isEmpty(), "Children should be created from non-conflicting vehicles");
@@ -38,8 +38,8 @@ public class IntersectionDecisionTreeTest {
         Vehicle v2 = new Vehicle("v2", Direction.SOUTH, Direction.NORTH);
         Vehicle v3 = new Vehicle("v3", Direction.EAST, Direction.WEST);
 
-        StepNode root1 = new StepNode(List.of(v1));
-        StepNode root2 = new StepNode(List.of(v3));
+        StepNode root1 = new StepNode(List.of(v1), List.of());
+        StepNode root2 = new StepNode(List.of(v3), List.of());
 
         decisionTree.build(root1, List.of(v1, v2));
         decisionTree.build(root2, List.of(v3));
