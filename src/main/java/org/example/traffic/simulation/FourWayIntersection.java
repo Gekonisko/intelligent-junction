@@ -3,6 +3,7 @@ package org.example.traffic.simulation;
 import org.example.traffic.model.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class FourWayIntersection implements Intersection {
     private final Map<Direction, Queue<Vehicle>> queues = new EnumMap<>(Direction.class);
@@ -78,13 +79,9 @@ public class FourWayIntersection implements Intersection {
 
         List<String> left = new ArrayList<>();
 
-        List<Vehicle> frontVehicles = getFrontVehicles();
-
-        var nonConflict = conflictResolver.nonConflictingGroup(frontVehicles, getPedestrians());
-        var maxGroup = nonConflict.poll();
-
-        if (maxGroup != null) {
-            List<Vehicle> removedVehicles = removeVehicles(maxGroup.getLeftVehicles());
+        var bestStep = getBestSteps(1).poll();
+        if (bestStep != null) {
+            List<Vehicle> removedVehicles = removeVehicles(bestStep.getLeftVehicles());
             removedVehicles.forEach(v -> left.add(v.vehicleId));
         }
         return new StepStatus(left);
@@ -96,19 +93,12 @@ public class FourWayIntersection implements Intersection {
 
         List<String> left = new ArrayList<>();
 
-        List<Vehicle> frontVehicles = getFrontVehicles();
-        var nonConflict = conflictResolver.nonConflictingGroup(frontVehicles, getPedestrians());
-
-        List<StepNode> decisions = new ArrayList<>();
-        for (int i = 0; i < decisionTree.getSimultaneousDecisions(); i++) {
-            if (nonConflict.isEmpty()) break;
-            var group = nonConflict.poll();
-            decisions.add(new StepNode(group.getLeftVehicles(), group.getLeftPedestrians()));
-        }
+        var bestSteps = getBestSteps(decisionTree.getSimultaneousDecisions());
+        var decisions = bestSteps.stream().map(s -> new StepNode(s.getLeftVehicles(), s.getLeftPedestrians())).toList();
 
         var best = decisionTree.getBestStepNode(decisions, getVehicles());
         if (best != null) {
-            List<Vehicle> removedVehicles = removeVehicles(best.leftVehicles);
+            List<Vehicle> removedVehicles = removeVehicles(best.getLeftVehicles());
             removedVehicles.forEach(v -> left.add(v.vehicleId));
         }
         return new StepStatus(left);
@@ -142,6 +132,21 @@ public class FourWayIntersection implements Intersection {
     }
 
     @Override
+    public LinkedList<StepResult> getBestSteps(int maxSteps) {
+        LinkedList<StepResult> bestSteps = new LinkedList<>();
+        List<Vehicle> frontVehicles = getFrontVehicles();
+
+        var nonConflict = conflictResolver.nonConflictingGroup(frontVehicles, getPedestrians());
+        var sortedNonConflict = sortStepResults(nonConflict);
+
+        for (int i = 0; i < maxSteps; i++) {
+            if(sortedNonConflict.isEmpty()) break;
+            bestSteps.add(sortedNonConflict.poll());
+        }
+        return bestSteps;
+    }
+
+    @Override
     public List<Pedestrian> getPedestrians() {
         List<Pedestrian> result = new ArrayList<>();
 
@@ -151,6 +156,20 @@ public class FourWayIntersection implements Intersection {
             }
         }
         return result;
+    }
+
+    private LinkedList<StepResult> sortStepResults(List<StepResult> stepResults) {
+        return stepResults.stream()
+                .sorted(Comparator.comparingInt(StepResult::getFullSize).thenComparing(this::getGroupPriority).reversed())
+                .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    private int getGroupPriority(StepResult step) {
+        int sum = 0;
+        for (Vehicle v : step.getLeftVehicles()) {
+            sum += roadPriorities.get(v.from);
+        }
+        return sum;
     }
 
     private StepStatus clockwiseAlternatingTraffic()

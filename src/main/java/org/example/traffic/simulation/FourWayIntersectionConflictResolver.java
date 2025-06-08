@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 
 public class FourWayIntersectionConflictResolver implements IntersectionConflictResolver {
 
-    public LinkedList<StepResult> nonConflictingGroup(List<Vehicle> vehicles, List<Pedestrian> pedestrians) {
-        LinkedList<StepResult> groups = new LinkedList<>();
+    public List<StepResult> nonConflictingGroup(List<Vehicle> vehicles, List<Pedestrian> pedestrians) {
+        List<StepResult> groups = new ArrayList<>();
         int n = vehicles.size();
         int max = 1 << n;
 
@@ -24,7 +24,7 @@ public class FourWayIntersectionConflictResolver implements IntersectionConflict
                 group.addPedestrians(getNoConflictPedestrians(group.getLeftVehicles(), pedestrians));
             }
         }
-        return sortByGroupSize(groups);
+        return groups;
     }
 
     public boolean isConflict(Vehicle a, Vehicle b) {
@@ -62,12 +62,6 @@ public class FourWayIntersectionConflictResolver implements IntersectionConflict
 
         return true;
 
-    }
-
-    private LinkedList<StepResult> sortByGroupSize(List<StepResult> groups) {
-        return groups.stream()
-                .sorted(Comparator.comparingInt(StepResult::getFullSize).reversed())
-                .collect(Collectors.toCollection(LinkedList::new));
     }
 
     private boolean isConflict(StepResult group) {

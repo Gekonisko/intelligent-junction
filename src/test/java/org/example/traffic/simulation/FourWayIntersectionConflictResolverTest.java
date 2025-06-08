@@ -149,7 +149,7 @@ public class FourWayIntersectionConflictResolverTest {
         List<Vehicle> vehicles = List.of(v1, v2, v3, v4);
         List<Pedestrian> pedestrians = List.of();
 
-        LinkedList<StepResult> groups = resolver.nonConflictingGroup(vehicles, pedestrians);
+        List<StepResult> groups = resolver.nonConflictingGroup(vehicles, pedestrians);
 
         assertNotNull(groups);
         assertFalse(groups.isEmpty());

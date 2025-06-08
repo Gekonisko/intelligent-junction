@@ -29,7 +29,7 @@ public class IntersectionDecisionTreeTest {
         StepNode root = new StepNode(List.of(v1), List.of());
         decisionTree.build(root, List.of(v1, v2));
 
-        assertFalse(root.children.isEmpty(), "Children should be created from non-conflicting vehicles");
+        assertFalse(root.getChildren().isEmpty(), "Children should be created from non-conflicting vehicles");
     }
 
     @Test

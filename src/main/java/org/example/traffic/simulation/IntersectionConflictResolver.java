@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface IntersectionConflictResolver {
     boolean isConflict(Vehicle a, Vehicle b);
-    LinkedList<StepResult> nonConflictingGroup(List<Vehicle> vehicles, List<Pedestrian> pedestrians);
+    List<StepResult> nonConflictingGroup(List<Vehicle> vehicles, List<Pedestrian> pedestrians);
 }

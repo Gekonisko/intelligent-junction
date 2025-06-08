@@ -1,6 +1,7 @@
 package org.example.traffic.simulation;
 
 import org.example.traffic.model.StepNode;
+import org.example.traffic.model.StepResult;
 import org.example.traffic.model.Vehicle;
 
 import java.util.*;
@@ -22,18 +23,13 @@ public class IntersectionDecisionTree implements DecisionTree {
     public void build(StepNode stepNode, List<Vehicle> vehicles) {
         Intersection intersection = this.intersection.createNewIntersection();
         intersection.addVehicles(vehicles);
-        intersection.removeVehicles(stepNode.leftVehicles);
+        intersection.removeVehicles(stepNode.getLeftVehicles());
 
-        var frontVehicles = intersection.getFrontVehicles();
-        var nonConflict = conflictResolver.nonConflictingGroup(frontVehicles, intersection.getPedestrians());
-
-        for (int i = 0 ; i < simultaneousDecisions ; i++) {
-            if(nonConflict.isEmpty()) break;
-
-            var targetGroup = nonConflict.poll();
-            StepNode childNode = new StepNode(targetGroup.getLeftVehicles(), targetGroup.getLeftPedestrians());
-            childNode.parent = stepNode;
-            stepNode.children.add(childNode);
+        var bestSteps = intersection.getBestSteps(getSimultaneousDecisions());
+        for (StepResult step : bestSteps) {
+            StepNode childNode = new StepNode(step.getLeftVehicles(), step.getLeftPedestrians());
+            childNode.setParent(stepNode);
+            stepNode.addChild(childNode);
 
             build(childNode, intersection.getVehicles(), 1);
         }
@@ -44,18 +40,13 @@ public class IntersectionDecisionTree implements DecisionTree {
 
         Intersection intersection = this.intersection.createNewIntersection();
         intersection.addVehicles(vehicles);
-        intersection.removeVehicles(stepNode.leftVehicles);
+        intersection.removeVehicles(stepNode.getLeftVehicles());
 
-        var frontVehicles = intersection.getFrontVehicles();
-        var nonConflict = conflictResolver.nonConflictingGroup(frontVehicles, intersection.getPedestrians());
-
-        for (int i = 0 ; i < simultaneousDecisions ; i++) {
-            if(nonConflict.isEmpty()) break;
-
-            var targetGroup = nonConflict.poll();
-            StepNode childNode = new StepNode(targetGroup.getLeftVehicles(), targetGroup.getLeftPedestrians());
-            childNode.parent = stepNode;
-            stepNode.children.add(childNode);
+        var bestSteps = intersection.getBestSteps(getSimultaneousDecisions());
+        for (StepResult step : bestSteps) {
+            StepNode childNode = new StepNode(step.getLeftVehicles(), step.getLeftPedestrians());
+            childNode.setParent(stepNode);
+            stepNode.addChild(childNode);
 
             build(childNode, intersection.getVehicles(), depth + 1);
         }
@@ -100,9 +91,9 @@ public class IntersectionDecisionTree implements DecisionTree {
 
         StepNode temp = node;
         while (temp != null) {
-            totalFromRoot += (temp.leftVehicles != null) ? temp.leftVehicles.size() : 0;
+            totalFromRoot +=  temp.getFullSize();
             currentDepth++;
-            temp = temp.parent;
+            temp = temp.getParent();
         }
 
         if (totalFromRoot > maxVehicles[0] ||
@@ -111,7 +102,7 @@ public class IntersectionDecisionTree implements DecisionTree {
             minDepth[0] = currentDepth;
         }
 
-        for (StepNode child : node.children) {
+        for (StepNode child : node.getChildren()) {
             dfsCount(child, maxVehicles, minDepth);
         }
     }

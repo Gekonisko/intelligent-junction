@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StepNode {
-    public StepNode parent;
-    public List<Vehicle> leftVehicles ;
-    public List<Pedestrian> leftPedestrians ;
-    public List<StepNode> children;
+    private StepNode parent;
+    private List<Vehicle> leftVehicles ;
+    private List<Pedestrian> leftPedestrians ;
+    private List<StepNode> children;
 
     public StepNode(List<Vehicle> leftVehicles, List<Pedestrian> leftPedestrians) {
         this.parent = null;
@@ -16,11 +16,31 @@ public class StepNode {
         this.children = new ArrayList<StepNode>();
     }
 
+    public int getFullSize() {
+        return leftVehicles.size() + leftPedestrians.size();
+    }
+
     public void addChild(StepNode child) {
         children.add(child);
     }
 
     public void setParent(StepNode parent) {
         this.parent = parent;
+    }
+
+    public StepNode getParent() {
+        return parent;
+    }
+
+    public List<Vehicle> getLeftVehicles() {
+        return leftVehicles;
+    }
+
+    public List<Pedestrian> getLeftPedestrians() {
+        return leftPedestrians;
+    }
+
+    public List<StepNode> getChildren() {
+        return children;
     }
 }
