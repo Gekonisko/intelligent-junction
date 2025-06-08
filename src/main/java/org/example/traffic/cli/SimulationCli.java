@@ -21,7 +21,7 @@ public class SimulationCli {
 
             DecisionTree decisionTree = null;
             if (engineType == EngineType.DECISION_TREE) {
-                decisionTree = new IntersectionDecisionTree(intersection, resolver, maxDepth, simultaneousDecisions);
+                decisionTree = new IntersectionDecisionTree(intersection, maxDepth, simultaneousDecisions);
             }
 
             SimulationEngine engine = new SimulationEngine(

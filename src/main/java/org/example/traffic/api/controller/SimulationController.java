@@ -20,7 +20,7 @@ public class SimulationController {
     public ResponseEntity<SimulationResponse> runSimulation(@RequestBody SimulationRequest request) {
         IntersectionConflictResolver conflictResolver = new FourWayIntersectionConflictResolver();
         FourWayIntersection intersection = new FourWayIntersection(conflictResolver);
-        IntersectionDecisionTree decisionTree = new IntersectionDecisionTree(intersection, conflictResolver, 4, 4);
+        IntersectionDecisionTree decisionTree = new IntersectionDecisionTree(intersection, 4, 4);
         SimulationEngine engine = new SimulationEngine(intersection, EngineType.DECISION_TREE, decisionTree);
         List<StepStatus> statuses = engine.runSimulation(request.getCommands());
 

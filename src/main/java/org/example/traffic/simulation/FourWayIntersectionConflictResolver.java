@@ -7,7 +7,8 @@ import java.util.stream.Collectors;
 
 public class FourWayIntersectionConflictResolver implements IntersectionConflictResolver {
 
-    public List<StepResult> nonConflictingGroup(List<Vehicle> vehicles, List<Pedestrian> pedestrians) {
+    @Override
+    public List<StepResult> nonConflictingGroups(List<Vehicle> vehicles, List<Pedestrian> pedestrians) {
         List<StepResult> groups = new ArrayList<>();
         int n = vehicles.size();
         int max = 1 << n;
@@ -27,6 +28,7 @@ public class FourWayIntersectionConflictResolver implements IntersectionConflict
         return groups;
     }
 
+    @Override
     public boolean isConflict(Vehicle a, Vehicle b) {
         Movement aMove = a.getMovement();
         Movement bMove = b.getMovement();

@@ -46,14 +46,12 @@ function Intersection({ step, stepVehicles }: Props) {
       ids.forEach(id => { vehicleToDir[id] = dir; });
     });
     const greenDirs = new Set(leftVehicles.map(id => vehicleToDir[id]).filter(Boolean));
-    // Wyznacz nowe światła
     const newLights: Record<string, 'green' | 'red'> = {
       NORTH: greenDirs.has('NORTH') ? 'green' : 'red',
       EAST: greenDirs.has('EAST') ? 'green' : 'red',
       SOUTH: greenDirs.has('SOUTH') ? 'green' : 'red',
       WEST: greenDirs.has('WEST') ? 'green' : 'red',
     };
-    // Sprawdź, które światła się zmieniają
     const yellowDirs: string[] = [];
     (['NORTH', 'EAST', 'SOUTH', 'WEST'] as const).forEach(dir => {
       if (lights[dir] !== newLights[dir]) {
@@ -61,7 +59,6 @@ function Intersection({ step, stepVehicles }: Props) {
       }
     });
     if (yellowDirs.length > 0) {
-      // Ustaw żółte światło na 0.7s
       setLights(prev => ({ ...prev, ...Object.fromEntries(yellowDirs.map(d => [d, 'yellow'])) }));
       yellowTimeout.current = setTimeout(() => {
         setLights(prev => ({ ...prev, ...Object.fromEntries((['NORTH', 'EAST', 'SOUTH', 'WEST'] as const).map(d => [d, newLights[d]])) }));
@@ -71,20 +68,17 @@ function Intersection({ step, stepVehicles }: Props) {
       setLights(newLights);
       prevLights.current = { ...newLights };
     }
-    // eslint-disable-next-line
   }, [currentStep, step, stepVehicles]);
 
   const vehicles = stepVehicles?.[currentStep] || {};
 
-  // Oblicz maksymalną liczbę aut na dowolnym pasie
   const maxNorth = vehicles['NORTH']?.length || 0;
   const maxSouth = vehicles['SOUTH']?.length || 0;
   const maxWest = vehicles['WEST']?.length || 0;
   const maxEast = vehicles['EAST']?.length || 0;
-  // Załóżmy, że jedno auto to 38px wysokości/szerokości + marginesy (np. 16px)
   const laneCarSize = 38 + 16;
   const minSize = 420;
-  const vertical = Math.max(maxNorth, maxSouth) * laneCarSize + 120; // 120px na centrum i światła
+  const vertical = Math.max(maxNorth, maxSouth) * laneCarSize + 120;
   const horizontal = Math.max(maxWest, maxEast) * laneCarSize + 120;
   const gridHeight = Math.max(minSize, vertical);
   const gridWidth = Math.max(minSize, horizontal);

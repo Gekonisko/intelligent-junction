@@ -149,7 +149,7 @@ public class FourWayIntersectionConflictResolverTest {
         List<Vehicle> vehicles = List.of(v1, v2, v3, v4);
         List<Pedestrian> pedestrians = List.of();
 
-        List<StepResult> groups = resolver.nonConflictingGroup(vehicles, pedestrians);
+        List<StepResult> groups = resolver.nonConflictingGroups(vehicles, pedestrians);
 
         assertNotNull(groups);
         assertFalse(groups.isEmpty());
@@ -173,7 +173,7 @@ public class FourWayIntersectionConflictResolverTest {
 
         List<Vehicle> vehicles = List.of(v1, v2, v3, v4);
         List<Pedestrian> pedestrians = List.of();
-        var groups = resolver.nonConflictingGroup(vehicles, pedestrians);
+        var groups = resolver.nonConflictingGroups(vehicles, pedestrians);
 
         var maxGroup = groups.stream().max(Comparator.comparingInt(StepResult::getFullSize)).orElse(null);
 

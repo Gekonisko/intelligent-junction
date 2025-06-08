@@ -1,4 +1,3 @@
-/* Stylowanie kolejek pojazdów dla VehicleList */
 .queueBox {
   display: flex;
   flex-direction: row;

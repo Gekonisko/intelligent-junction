@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -22,7 +21,7 @@ public class SimulationEngineTest {
     public void setUp() {
         IntersectionConflictResolver resolver = new FourWayIntersectionConflictResolver();
         Intersection intersection = new FourWayIntersection(resolver);
-        DecisionTree decisionTree = new IntersectionDecisionTree(intersection, resolver, 4, 4);
+        DecisionTree decisionTree = new IntersectionDecisionTree(intersection, 4, 4);
         engine = new SimulationEngine(intersection, EngineType.DECISION_TREE, decisionTree);
     }
 

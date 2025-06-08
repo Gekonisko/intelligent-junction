@@ -18,7 +18,7 @@ public class IntersectionDecisionTreeTest {
     void setUp() {
         IntersectionConflictResolver conflictResolver = new FourWayIntersectionConflictResolver();
         Intersection intersection = new FourWayIntersection(conflictResolver);
-        this.decisionTree = new IntersectionDecisionTree(intersection, conflictResolver, 3, 2);
+        this.decisionTree = new IntersectionDecisionTree(intersection, 3, 2);
     }
 
     @Test

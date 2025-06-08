@@ -136,7 +136,7 @@ public class FourWayIntersection implements Intersection {
         LinkedList<StepResult> bestSteps = new LinkedList<>();
         List<Vehicle> frontVehicles = getFrontVehicles();
 
-        var nonConflict = conflictResolver.nonConflictingGroup(frontVehicles, getPedestrians());
+        var nonConflict = conflictResolver.nonConflictingGroups(frontVehicles, getPedestrians());
         var sortedNonConflict = sortStepResults(nonConflict);
 
         for (int i = 0; i < maxSteps; i++) {

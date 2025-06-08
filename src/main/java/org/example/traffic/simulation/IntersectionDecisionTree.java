@@ -8,13 +8,11 @@ import java.util.*;
 
 public class IntersectionDecisionTree implements DecisionTree {
     private final Intersection intersection;
-    private final IntersectionConflictResolver conflictResolver;
     private final int maxDepth;
     private final int simultaneousDecisions;
 
-    public IntersectionDecisionTree(Intersection intersection, IntersectionConflictResolver conflictResolver, int maxDepth, int simultaneousDecisions) {
+    public IntersectionDecisionTree(Intersection intersection, int maxDepth, int simultaneousDecisions) {
         this.intersection = intersection;
-        this.conflictResolver = conflictResolver;
         this.maxDepth = maxDepth;
         this.simultaneousDecisions = simultaneousDecisions;
     }
