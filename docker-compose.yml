@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   backend:
     build:
@@ -10,8 +8,6 @@ services:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=default
-    networks:
-      - traffic-network
 
   frontend:
     build:
@@ -20,13 +16,4 @@ services:
     container_name: traffic-frontend
     restart: always
     ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    networks:
-      - traffic-network
-
-networks:
-  traffic-network:
-    driver: bridge
+      - "3000:80"
