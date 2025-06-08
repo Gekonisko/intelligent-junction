@@ -56,7 +56,7 @@ Symuluje pojedynczy krok – pojazdy z aktualnie zielonym światłem próbują p
 ```
 
 ### failureMode
-Dodaje pojazd do kolejki na drodze startRoad, którego celem jest endRoad.
+Włącza lub wyłącza tryb awaryjny (np. migające pomarańczowe światło).
 
 | Pole |             Wartość              |
 |:----:|:--------------------------------:|
