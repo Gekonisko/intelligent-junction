@@ -56,7 +56,7 @@ Symuluje pojedynczy krok – pojazdy z aktualnie zielonym światłem próbują p
 ```
 
 ### failureMode
-Włącza lub wyłącza tryb awaryjny (np. migające pomarańczowe światło).
+Włącza lub wyłącza tryb awaryjny, w którym sygnalizacja świetlna miga na żółto, a ruch pojazdów odbywa się naprzemiennie, zgodnie z ruchem wskazówek zegara.
 
 | Pole |             Wartość              |
 |:----:|:--------------------------------:|
