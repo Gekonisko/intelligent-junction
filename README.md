@@ -21,7 +21,88 @@ project-root/
     └── test/                           # Testy jednostkowe (JUnit)
 ```
 
-## 🧪 Uruchamianie z linii komend (CLI)
+## 🧾 Komendy symulacji (JSON)
+Symulacja sterowana jest za pomocą pliku wejściowego w formacie JSON, zawierającego listę komend wykonywanych krok po kroku.
+
+Każda komenda opisuje zdarzenie lub zmianę stanu na skrzyżowaniu.
+
+### addVehicle
+Dodaje pojazd do kolejki na drodze startRoad, którego celem jest endRoad.
+
+| Pole |Wartość|
+|:----:|:-----:|
+| `vehicleId` | unikalny identyfikator pojazdu|
+| `startRoad` | `north`, `south`, `east`, `west` |
+| `endRoad` | `north`, `south`, `east`, `west` |
+
+**Przykład komendy:**
+```json
+{
+   "type": "addVehicle",
+   "vehicleId": "vehicle1",
+   "startRoad": "west",
+   "endRoad": "north"
+}
+```
+
+### step
+Symuluje pojedynczy krok – pojazdy z aktualnie zielonym światłem próbują przejechać przez skrzyżowanie.
+
+**Przykład komendy:**
+```json
+{
+   "type": "step"
+}
+```
+
+### failureMode
+Dodaje pojazd do kolejki na drodze startRoad, którego celem jest endRoad.
+
+| Pole |             Wartość              |
+|:----:|:--------------------------------:|
+| `state` |         	`true` lub `false`          |
+
+**Przykład komendy:**
+```json
+{
+   "type": "failureMode",
+   "state": "true"
+}
+```
+
+### roadPriority
+Ustawia priorytet danej drogi. Im wyższy priorytet (`int ≥ 0`), tym większa szansa na wcześniejsze zapalenie zielonego światła dla tej drogi.
+
+| Pole |             Wartość              |
+|:----:|:--------------------------------:|
+| `road` |         	`north`, `south`, `east`, `west`          |
+| `priority` |         	liczba całkowita ≥ 0         |
+
+**Przykład komendy:**
+```json
+{
+   "type": "roadPriority",
+   "road" : "west",
+   "priority": "1"
+}
+```
+
+### addPedestrian
+Dodaje pieszego czekającego na przejście przez jezdnię. Może wpłynąć na decyzję o zapaleniu zielonego światła.
+
+| Pole |             Wartość              |
+|:----:|:--------------------------------:|
+| `road` |         	`north`, `south`, `east`, `west`          |
+
+**Przykład komendy:**
+```json
+{
+   "type": "addPedestrian",
+   "road" : "west"
+}
+```
+
+## ▶️ Uruchamianie z linii komend (CLI)
 
 #### Dostępne opcje:
 ```less
@@ -152,7 +233,7 @@ Content-Type: application/json
 
 Interaktywny frontend aplikacji umożliwia użytkownikowi wizualne sterowanie i obserwowanie działania symulacji skrzyżowania. Zbudowany został w technologii React z wykorzystaniem bibliotek do wizualizacji i interakcji.
 
-### ▶️ Jak uruchomić frontend
+### Jak uruchomić frontend
 1. Wejdź do katalogu:
 ```bash
 cd frontend
