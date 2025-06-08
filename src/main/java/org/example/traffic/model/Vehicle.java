@@ -1,9 +1,9 @@
 package org.example.traffic.model;
 
 public class Vehicle {
-    public String vehicleId;
-    public Direction from;
-    public Direction to;
+    private final String vehicleId;
+    private final Direction from;
+    private final Direction to;
 
     public Vehicle(String vehicleId, Direction from, Direction to) {
         this.vehicleId = vehicleId;
@@ -38,6 +38,18 @@ public class Vehicle {
                 default -> null;
             };
         };
+    }
+
+    public String getVehicleId() {
+        return vehicleId;
+    }
+
+    public Direction getFrom() {
+        return from;
+    }
+
+    public Direction getTo() {
+        return to;
     }
 
     @Override

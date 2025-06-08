@@ -34,7 +34,7 @@ public class FourWayIntersection implements Intersection {
 
     @Override
     public void addVehicle(Vehicle v) {
-        queues.get(v.from).add(v);
+        queues.get(v.getFrom()).add(v);
     }
 
     @Override
@@ -46,9 +46,9 @@ public class FourWayIntersection implements Intersection {
 
     @Override
     public Vehicle removeVehicle(Vehicle v) {
-        var queueVehicle = Objects.requireNonNull(queues.get(v.from).peek());
-        if (Objects.equals(queueVehicle.vehicleId, v.vehicleId)) {
-            return  Objects.requireNonNull(queues.get(v.from).poll());
+        var queueVehicle = Objects.requireNonNull(queues.get(v.getFrom()).peek());
+        if (Objects.equals(queueVehicle.getVehicleId(), v.getVehicleId())) {
+            return  Objects.requireNonNull(queues.get(v.getFrom()).poll());
         }
         return null;
     }
@@ -82,7 +82,7 @@ public class FourWayIntersection implements Intersection {
         var bestStep = getBestSteps(1).poll();
         if (bestStep != null) {
             List<Vehicle> removedVehicles = removeVehicles(bestStep.getLeftVehicles());
-            removedVehicles.forEach(v -> left.add(v.vehicleId));
+            removedVehicles.forEach(v -> left.add(v.getVehicleId()));
         }
         return new StepStatus(left);
     }
@@ -99,7 +99,7 @@ public class FourWayIntersection implements Intersection {
         var best = decisionTree.getBestStepNode(decisions, getVehicles());
         if (best != null) {
             List<Vehicle> removedVehicles = removeVehicles(best.getLeftVehicles());
-            removedVehicles.forEach(v -> left.add(v.vehicleId));
+            removedVehicles.forEach(v -> left.add(v.getVehicleId()));
         }
         return new StepStatus(left);
     }
@@ -167,7 +167,7 @@ public class FourWayIntersection implements Intersection {
     private int getGroupPriority(StepResult step) {
         int sum = 0;
         for (Vehicle v : step.getLeftVehicles()) {
-            sum += roadPriorities.get(v.from);
+            sum += roadPriorities.get(v.getFrom());
         }
         return sum;
     }
@@ -179,9 +179,9 @@ public class FourWayIntersection implements Intersection {
             if(!queues.get(newDirection).isEmpty()) {
                 lastClockwiseDirection = newDirection;
                 var vehicle = queues.get(newDirection).poll();
-                return new StepStatus(List.of(vehicle.vehicleId));
+                return new StepStatus(List.of(vehicle.getVehicleId()));
             }
-            newDirection = Direction.leftOf(lastClockwiseDirection);
+            newDirection = Direction.leftOf(newDirection);
         }
         return new StepStatus(List.of());
     }

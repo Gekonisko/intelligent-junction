@@ -158,7 +158,7 @@ public class FourWayIntersectionConflictResolverTest {
             for (int i = 0; i < group.getLeftVehicles().size(); i++) {
                 for (int j = i + 1; j < group.getLeftVehicles().size(); j++) {
                     assertFalse(resolver.isConflict(group.getLeftVehicles().get(i), group.getLeftVehicles().get(j)),
-                            "Found conflict between " + group.getLeftVehicles().get(i).vehicleId + " and " + group.getLeftVehicles().get(j).vehicleId);
+                            "Found conflict between " + group.getLeftVehicles().get(i).getVehicleId() + " and " + group.getLeftVehicles().get(j).getVehicleId());
                 }
             }
         }

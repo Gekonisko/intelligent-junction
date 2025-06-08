@@ -32,31 +32,31 @@ public class FourWayIntersectionConflictResolver implements IntersectionConflict
         Movement bMove = b.getMovement();
 
         if(aMove == null || bMove == null) return true;
-        if(a.from == b.from) return true;
+        if(a.getFrom() == b.getFrom()) return true;
 
         if(aMove == Movement.STRAIGHT)
         {
-            if (Direction.oppositeOf(a.from) == b.from &&
+            if (Direction.oppositeOf(a.getFrom()) == b.getFrom() &&
                     (bMove == Movement.STRAIGHT || bMove == Movement.RIGHT)) return false;
-            else if(Direction.leftOf(a.from) == b.from &&
+            else if(Direction.leftOf(a.getFrom()) == b.getFrom() &&
                     bMove == Movement.RIGHT) return false;
         }
         else if(aMove == Movement.RIGHT)
         {
-            if(Direction.oppositeOf(a.from) == b.from &&
+            if(Direction.oppositeOf(a.getFrom()) == b.getFrom() &&
                     (bMove == Movement.STRAIGHT || bMove == Movement.RIGHT)) return false;
-            else if(Direction.leftOf(a.from) == b.from &&
+            else if(Direction.leftOf(a.getFrom()) == b.getFrom() &&
                     (bMove == Movement.RIGHT || bMove == Movement.LEFT)) return false;
-            else if(Direction.rightOf(a.from) == b.from &&
+            else if(Direction.rightOf(a.getFrom()) == b.getFrom() &&
                     (bMove == Movement.STRAIGHT || bMove == Movement.RIGHT  || bMove == Movement.LEFT)) return false;
         }
         else if(aMove == Movement.LEFT)
         {
-            if(Direction.oppositeOf(a.from) == b.from &&
+            if(Direction.oppositeOf(a.getFrom()) == b.getFrom() &&
                     bMove == Movement.LEFT) return false;
-            else if(Direction.leftOf(a.from) == b.from &&
+            else if(Direction.leftOf(a.getFrom()) == b.getFrom() &&
                     bMove == Movement.RIGHT) return false;
-            else if(Direction.rightOf(a.from) == b.from &&
+            else if(Direction.rightOf(a.getFrom()) == b.getFrom() &&
                     bMove == Movement.RIGHT) return false;
         }
 
@@ -78,12 +78,12 @@ public class FourWayIntersectionConflictResolver implements IntersectionConflict
     private List<Pedestrian> getNoConflictPedestrians(List<Vehicle> vehicles, List<Pedestrian> pedestrians) {
         List<Direction> targetDirections = new ArrayList<>();
         for (Vehicle v : vehicles) {
-            targetDirections.add(v.to);
+            targetDirections.add(v.getTo());
         }
 
         List<Pedestrian> noConflictPedestrians = new ArrayList<>();
         for (Pedestrian p : pedestrians) {
-            if (!targetDirections.contains(p.direction)) {
+            if (!targetDirections.contains(p.getDirection())) {
                 noConflictPedestrians.add(p);
             }
         }

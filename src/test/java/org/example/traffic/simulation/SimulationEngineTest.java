@@ -78,7 +78,7 @@ public class SimulationEngineTest {
         );
         List<StepStatus> results = engine.runSimulation(commands);
 
-        int vehicles = results.stream().map(l -> l.leftVehicles.size()).reduce(0, Integer::sum);
+        int vehicles = results.stream().map(l -> l.getLeftVehicles().size()).reduce(0, Integer::sum);
 
         assertEquals(12, vehicles);
     }
@@ -102,7 +102,7 @@ public class SimulationEngineTest {
         );
         List<StepStatus> results = engine.runSimulation(commands);
 
-        int vehicles = results.stream().map(l -> l.leftVehicles.size()).reduce(0, Integer::sum);
+        int vehicles = results.stream().map(l -> l.getLeftVehicles().size()).reduce(0, Integer::sum);
 
         assertEquals(8, vehicles);
     }
